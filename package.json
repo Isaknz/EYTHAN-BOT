@@ -1,0 +1,26 @@
+{
+  "name": "isaacdev-bot",
+  "version": "1.0.0",
+  "description": "Bot de WhatsApp IsaacDev - Creado por ti",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": ["whatsapp", "bot", "isaacdev", "baileys"],
+  "author": "IsaacDev",
+  "license": "MIT",
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.6.0",
+    "qrcode-terminal": "^0.12.0",
+    "fs-extra": "^11.1.1",
+    "pino": "^8.14.1",
+    "sharp": "^0.32.1",
+    "axios": "^1.4.0",
+    "mime-types": "^2.1.35",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
