@@ -56,3 +56,23 @@ mkdir -p assets
 
 # 6. Iniciar bot
 npm start
+# Instalar pm2
+npm install -g pm2
+
+# Iniciar con pm2
+pm2 start index.js --name isaacdev
+
+# Guardar configuración
+pm2 save
+
+# Ver estado
+pm2 status
+
+# Ver logs
+pm2 logs isaacdev
+
+# Reiniciar
+pm2 restart isaacdev
+
+# Detener
+pm2 stop isaacdev
