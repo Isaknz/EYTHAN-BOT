@@ -81,7 +81,7 @@ let handler = async (m, { conn, text, command }) => {
             if (!text)
                 return m.reply("❌ Escribe tu pregunta");
 
-            const completion = await openai.chat.completions.create({
+            const complet ion = await openai.chat.completions.create({
                 model: "gpt-4o-mini",
                 messages: [
                     {

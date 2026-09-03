@@ -20,7 +20,7 @@ module.exports = {
             const resultado = eval(operacion);
 
             await sock.sendMessage(from, {
-                text: `🔢 *Calculadora*\n\n📝 Operación: \`${operacion}\`\n✅ Resultado: *${resultado}*`
+                text: `🔢 *Calculadora*\n\n📝 Operación: `${operacion}`\n✅ Resultado: *${resultado}*`
             });
         } catch (e) {
             await sock.sendMessage(from, { text: '❌ Operación inválida.' });

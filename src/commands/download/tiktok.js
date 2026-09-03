@@ -1,57 +1,67 @@
-const axios = require("axios");
+const axios = require('axios');
 
 module.exports = {
-
     name: "tiktok",
-    aliases: ["tt"],
+    aliases: ["tt", "tktk"],
     description: "Descargar video de TikTok",
-
+    
     async execute(sock, message, args, ctx) {
-
         const { from } = ctx;
-
-        if (!args[0]) {
+        
+        if (!args.length) {
             return sock.sendMessage(from, {
-                text: "❌ Envia el link de TikTok\n\nEjemplo:\n.tiktok https://vm.tiktok.com/xxxxx/"
+                text: "❌ Envía el link de TikTok\n\nEjemplo:\n.tiktok https://vm.tiktok.com/..."
             });
         }
 
         const url = args[0];
-
-        try {
-
-            await sock.sendMessage(from, {
-                text: "⬇️ Descargando TikTok..."
+        
+        // Validar URL
+        if (!url.includes('tiktok.com') && !url.includes('vm.tiktok.com')) {
+            return sock.sendMessage(from, {
+                text: "❌ Eso no parece ser un link de TikTok válido."
             });
-
-            const api = `https://tikwm.com/api/?url=${url}`;
-
-            const { data } = await axios.get(api);
-
-            if (!data || !data.data) {
-                return sock.sendMessage(from, {
-                    text: "❌ No se pudo descargar el video"
-                });
-            }
-
-            const videoUrl = data.data.play;
-
-            await sock.sendMessage(from, {
-                video: { url: videoUrl },
-                mimetype: "video/mp4",
-                caption: "🎵 TikTok descargado"
-            });
-
-        } catch (error) {
-
-            console.error(error);
-
-            await sock.sendMessage(from, {
-                text: "❌ Error descargando TikTok"
-            });
-
         }
 
-    }
+        try {
+            await sock.sendMessage(from, {
+                text: "⏳ Descargando video..."
+            });
 
+            // Usar API pública para TikTok
+            const apiUrl = `https://api.tiklydown.eu.org/api/download?url=${encodeURIComponent(url)}`;
+            
+            const response = await axios.get(apiUrl, { timeout: 30000 });
+            
+            if (!response.data || !response.data.video) {
+                throw new Error('No se pudo obtener el video');
+            }
+
+            const videoUrl = response.data.video;
+            
+            // Descargar video
+            const videoResponse = await axios.get(videoUrl, {
+                responseType: 'arraybuffer',
+                timeout: 60000
+            });
+            
+            const buffer = Buffer.from(videoResponse.data);
+
+            await sock.sendMessage(from, {
+                video: buffer,
+                caption: "✅ Descargado con éxito"
+            }, { quoted: message });
+
+        } catch (error) {
+            console.error("Error en tiktok:", error);
+            
+            let errorMsg = "Error descargando el video";
+            if (error.code === 'ECONNABORTED') errorMsg = "⏱️ Tiempo de espera agotado";
+            if (error.response?.status === 404) errorMsg = "❌ Video no encontrado o privado";
+            
+            await sock.sendMessage(from, {
+                text: `❌ ${errorMsg}`
+            });
+        }
+    }
 };

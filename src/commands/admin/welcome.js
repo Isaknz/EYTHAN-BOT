@@ -13,12 +13,12 @@ module.exports = {
         }
 
         const groupSettings = database.getGroup(from);
-        const newState = !groupSettings.welcome;
+        const new State = !groupSettings.welcome;
 
-        database.updateGroup(from, { welcome: newState });
+        database.updateGroup(from, { welcome: new State });
 
         await sock.sendMessage(from, {
-            text: newState 
+            text: new State 
                 ? '✅ Bienvenida activada\n\nSe enviará la foto de perfil de cada nuevo miembro.' 
                 : '❌ Bienvenida desactivada'
         });

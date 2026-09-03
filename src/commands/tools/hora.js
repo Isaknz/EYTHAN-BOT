@@ -29,7 +29,7 @@ module.exports = {
             });
 
             await sock.sendMessage(from, {
-                text: `🕐 *Hora en ${name}, ${country}*\n\n📅 ${ahora}\n🌍 Zona horaria: \`${timezone}\``
+                text: `🕐 *Hora en ${name}, ${country}*\n\n📅 ${ahora}\n🌍 Zona horaria: `${timezone}``
             });
         } catch (e) {
             await sock.sendMessage(from, { text: '❌ Error al obtener la hora.' });

@@ -13,12 +13,12 @@ module.exports = {
         }
 
         const groupSettings = database.getGroup(from);
-        const newState = !groupSettings.goodbye;
+        const new State = !groupSettings.goodbye;
 
-        database.updateGroup(from, { goodbye: newState });
+        database.updateGroup(from, { goodbye: new State });
 
         await sock.sendMessage(from, {
-            text: newState 
+            text: new State 
                 ? '✅ Despedida activada\n\nSe enviará isaacdelete.png cuando alguien salga.' 
                 : '❌ Despedida desactivada'
         });

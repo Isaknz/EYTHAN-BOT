@@ -54,9 +54,9 @@ class AntiLink {
         // Sistema de advertencias
         const userKey = `${from}:${sender}`;
         const currentWarnings = this.warnings.get(userKey) || 0;
-        const newWarnings = currentWarnings + 1;
+        const new Warnings = currentWarnings + 1;
 
-        if (newWarnings >= this.maxWarnings) {
+        if (new Warnings >= this.maxWarnings) {
             this.warnings.delete(userKey);
             
             try {
@@ -71,11 +71,11 @@ class AntiLink {
                     text: `⚠️ No pude expulsar a @${sender.split('@')[0]} (necesito ser admin)`,
                     mentions: [sender]
                 });
-                return { action: 'warn', warning: newWarnings, links };
+                return { action: 'warn', warning: new Warnings, links };
             }
         }
 
-        this.warnings.set(userKey, newWarnings);
+        this.warnings.set(userKey, new Warnings);
         
         // Borrar mensaje si es posible
         try {
@@ -85,11 +85,11 @@ class AntiLink {
         }
 
         await sock.sendMessage(from, {
-            text: `⚠️ @${sender.split('@')[0]} \n\n*Advertencia ${newWarnings}/${this.maxWarnings}*\nNo se permiten enlaces aquí.\n\nLinks detectados: ${links.join(', ')}`,
+            text: `⚠️ @${sender.split('@')[0]} \n\n*Advertencia ${new Warnings}/${this.maxWarnings}*\nNo se permiten enlaces aquí.\n\nLinks detectados: ${links.join(', ')}`,
             mentions: [sender]
         });
 
-        return { action: 'warn', warning: newWarnings, links };
+        return { action: 'warn', warning: new Warnings, links };
     }
 
     getWarnings(userId, groupId) {

@@ -17,15 +17,16 @@ const database = {
     get: () => {
         return fs.readJsonSync(DB_PATH);
     },
-
+    
     // Guardar datos
     save: (data) => {
         fs.writeJsonSync(DB_PATH, data, { spaces: 2 });
     },
-
+    
     // Configuración de grupo
     getGroup: (groupId) => {
         const db = database.get();
+        
         if (!db.groups[groupId]) {
             db.groups[groupId] = {
                 welcome: true,
@@ -36,18 +37,20 @@ const database = {
             };
             database.save(db);
         }
+        
         return db.groups[groupId];
     },
-
+    
     updateGroup: (groupId, settings) => {
         const db = database.get();
         db.groups[groupId] = { ...db.groups[groupId], ...settings };
         database.save(db);
     },
-
+    
     // Usuarios
     getUser: (userId) => {
         const db = database.get();
+        
         if (!db.users[userId]) {
             db.users[userId] = {
                 xp: 0,
@@ -57,9 +60,10 @@ const database = {
             };
             database.save(db);
         }
+        
         return db.users[userId];
     },
-
+    
     updateUser: (userId, data) => {
         const db = database.get();
         db.users[userId] = { ...db.users[userId], ...data };
