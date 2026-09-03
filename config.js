@@ -3,10 +3,11 @@ module.exports = {
     prefix: '.',
     owner: 'Isaac',
     ownerNumber: '51983569753@s.whatsapp.net',
-    
+    botNumber: '', // ← Se llena automáticamente al conectar
+
     // Configuración de imágenes
     assets: {
-        logo: './assets/isaacdev.png',
+        logo: './assets/logo.jpeg',
         delete: './assets/isaacdelete.png',
         menu: './assets/menu.png'
     },
@@ -20,8 +21,8 @@ module.exports = {
     
     // Opciones de grupo
     groupOptions: {
-        welcome: true,
-        goodbye: true,
+        welcome: false,
+        goodbye: false,
         antilink: false,
         antispam: false
     }

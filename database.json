@@ -1,0 +1,57 @@
+{
+  "groups": {
+    "120363406920518677@g.us": {
+      "welcome": true,
+      "goodbye": true,
+      "antilink": false,
+      "antispam": false,
+      "prefix": "."
+    },
+    "120363426107389509@g.us": {
+      "welcome": true,
+      "goodbye": true,
+      "antilink": false,
+      "antispam": false,
+      "prefix": "."
+    },
+    "120363403936499704@g.us": {
+      "welcome": true,
+      "goodbye": true,
+      "antilink": false,
+      "antispam": false,
+      "prefix": "."
+    },
+    "120363426338448353@g.us": {
+      "welcome": true,
+      "goodbye": true,
+      "antilink": false,
+      "antispam": false,
+      "prefix": "."
+    },
+    "120363400057428810@g.us": {
+      "welcome": true,
+      "goodbye": true,
+      "antilink": false,
+      "antispam": false,
+      "prefix": "."
+    },
+    "120363409116537594@g.us": {
+      "welcome": true,
+      "goodbye": true,
+      "antilink": false,
+      "antispam": false,
+      "prefix": "."
+    },
+    "120363409921341860@g.us": {
+      "welcome": true,
+      "goodbye": true,
+      "antilink": false,
+      "antispam": false,
+      "prefix": "."
+    }
+  },
+  "users": {},
+  "settings": {},
+  "88515702476801@lid": 2,
+  "undefined": 1
+}

@@ -5,20 +5,45 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon --ignore 'auth_info_baileys/**' --ignore 'sessions/**' --ignore 'baileys_store/**' --ignore '*.json' --ignore 'node_modules/**' index.js"
   },
-  "keywords": ["whatsapp", "bot", "isaacdev", "baileys"],
+  "keywords": [
+    "whatsapp",
+    "bot",
+    "isaacdev",
+    "baileys"
+  ],
   "author": "IsaacDev",
   "license": "MIT",
   "dependencies": {
-    "@whiskeysockets/baileys": "^6.6.0",
-    "qrcode-terminal": "^0.12.0",
-    "fs-extra": "^11.1.1",
-    "pino": "^8.14.1",
-    "sharp": "^0.32.1",
-    "axios": "^1.4.0",
+    "@whiskeysockets/baileys": "^6.7.21",
+    "axios": "^1.14.0",
+    "chalk": "^4.1.2",
+    "cron": "^3.5.0",
+    "dotenv": "^17.3.1",
+    "ffmpeg-static": "^5.3.0",
+    "fluent-ffmpeg": "^2.1.3",
+    "form-data": "^4.0.5",
+    "fs": "^0.0.1-security",
+    "fs-extra": "^11.3.4",
+    "gif-search": "^3.0.3",
+    "google-img-scrap": "^1.1.8",
+    "gtts": "^0.2.1",
+    "luxon": "^3.7.2",
     "mime-types": "^2.1.35",
-    "path": "^0.12.7"
+    "node-cron": "^3.0.3",
+    "openai": "^6.33.0",
+    "path": "^0.12.7",
+    "pino": "^8.21.0",
+    "pino-pretty": "^11.3.0",
+    "play-dl": "^1.9.7",
+    "qrcode": "^1.5.4",
+    "qrcode-terminal": "^0.12.0",
+    "sharp": "^0.32.6",
+    "spotifydl-core": "^0.2.0",
+    "yt-search": "^2.13.1",
+    "ytdl-core": "^4.11.5",
+    "ytsr": "^3.8.4"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

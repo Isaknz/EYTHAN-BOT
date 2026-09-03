@@ -1,96 +1,120 @@
-const fs = require('fs');
-const config = require('../../config');
-const axios = require('axios');
+const database = require('../core/database');
+const { generarAudioBienvenida } = require('../utils/audio-welcome');
 
-async function groupParticipantsUpdateHandler(sock, update) {
-    const { id, participants, action } = update;
-    
+module.exports = async (sock, update) => {
+
     try {
-        // Obtener información del grupo
-        const groupMetadata = await sock.groupMetadata(id);
-        const groupName = groupMetadata.subject;
-        
-        for (const participant of participants) {
-            const userNumber = participant.split('@')[0];
-            
-            if (action === 'add' && config.groupOptions.welcome) {
-                // BIENVENIDA - Usar foto de perfil del usuario
-                await handleWelcome(sock, id, participant, groupName);
-                
-            } else if ((action === 'remove' || action === 'leave') && config.groupOptions.goodbye) {
-                // DESPEDIDA - Usar isaacdelete.png
-                await handleGoodbye(sock, id, participant, groupName);
+
+        const { id, participants, action } = update;
+
+        if (action !== 'add') return;
+
+        const groupSettings =
+            database.getGroup(id);
+
+        // 🛡️ Protección contra error
+        if (!groupSettings || !groupSettings.welcome)
+            return;
+
+        const metadata =
+            await sock.groupMetadata(id);
+
+        for (let user of participants) {
+
+            // =========================
+            // NOMBRE REAL
+            // =========================
+
+            let participante =
+                metadata.participants
+                .find(p => p.id === user);
+
+            let nombre =
+                participante?.notify
+                || participante?.name
+                || user.split("@")[0];
+
+            // =========================
+            // FOTO PERFIL
+            // =========================
+
+            let pp;
+
+            try {
+
+                pp =
+                await sock.profilePictureUrl(
+                    user,
+                    'image'
+                );
+
+            } catch {
+
+                pp =
+"https://i.imgur.com/8Km9tLL.jpg";
+
             }
-        }
-        
-    } catch (error) {
-        console.error('Error en group handler:', error);
-    }
-}
 
-async function handleWelcome(sock, groupId, participant, groupName) {
-    try {
-        // Intentar obtener foto de perfil del usuario
-        let profilePic;
-        try {
-            profilePic = await sock.profilePictureUrl(participant, 'image');
-        } catch {
-            profilePic = null;
-        }
-        
-        const welcomeText = config.messages.welcome(
-            `@${participant.split('@')[0]}`, 
-            groupName
+            // =========================
+            // TEXTO
+            // =========================
+
+            let texto =
+`👋 *BIENVENIDO*
+
+Hola @${nombre}
+
+🎉 Bienvenido a:
+*${metadata.subject}*
+
+📜 Lee las reglas
+🤖 Disfruta tu estadía`;
+
+            await sock.sendMessage(id, {
+
+                image: { url: pp },
+
+                caption: texto,
+
+                mentions: [user]
+
+            });
+
+            // =========================
+            // AUDIO
+            // =========================
+
+            let audio =
+                await generarAudioBienvenida(
+                    nombre,
+                    metadata.subject
+                );
+
+            console.log("Audio:", audio ? "SI" : "NO");
+
+            if (audio) {
+
+                await sock.sendMessage(id, {
+
+                    audio: audio,
+
+                    mimetype: "audio/mpeg",
+
+                    ptt: true
+
+                });
+
+            }
+
+        } // ← cierre correcto del FOR
+
+    } catch (error) {
+
+        console.error(
+            "Error en group-handler:",
+            error
         );
-        
-        if (profilePic) {
-            // Descargar y enviar foto de perfil con mensaje
-            const response = await axios.get(profilePic, { responseType: 'arraybuffer' });
-            const buffer = Buffer.from(response.data, 'binary');
-            
-            await sock.sendMessage(groupId, {
-                image: buffer,
-                caption: welcomeText,
-                mentions: [participant]
-            });
-        } else {
-            // Si no tiene foto, enviar solo texto
-            await sock.sendMessage(groupId, {
-                text: welcomeText,
-                mentions: [participant]
-            });
-        }
-        
-        console.log(`👋 Bienvenida enviada a ${participant}`);
-        
-    } catch (error) {
-        console.error('Error en bienvenida:', error);
-    }
-}
 
-async function handleGoodbye(sock, groupId, participant, groupName) {
-    try {
-        const goodbyeText = config.messages.goodbye(`@${participant.split('@')[0]}`);
-        
-        // Verificar si existe isaacdelete.png
-        if (fs.existsSync(config.assets.delete)) {
-            await sock.sendMessage(groupId, {
-                image: fs.readFileSync(config.assets.delete),
-                caption: goodbyeText,
-                mentions: [participant]
-            });
-        } else {
-            await sock.sendMessage(groupId, {
-                text: goodbyeText,
-                mentions: [participant]
-            });
-        }
-        
-        console.log(`👋 Despedida enviada a ${participant}`);
-        
-    } catch (error) {
-        console.error('Error en despedida:', error);
     }
-}
 
-module.exports = { groupParticipantsUpdateHandler };
+};
