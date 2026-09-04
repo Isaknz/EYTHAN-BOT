@@ -5,6 +5,11 @@ module.exports = {
     ownerNumber: '51983569753@s.whatsapp.net',
     botNumber: '', // ← Se llena automáticamente al conectar
 
+    // Claves de API (se cargan desde el archivo .env, nunca las pongas aquí en texto plano)
+    anthropicKey: process.env.ANTHROPIC_API_KEY,
+    veniceKey: process.env.VENICE_API_KEY,
+    openrouterKey: process.env.OPENROUTER_API_KEY,
+
     // Configuración de imágenes
     assets: {
         logo: './assets/logo.jpeg',

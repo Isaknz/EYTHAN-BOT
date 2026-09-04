@@ -52,8 +52,10 @@ module.exports = {
             });
 
             // Descargar con yt-dlp
+            // --extractor-args fuerza el cliente "android" de YouTube, que evita el
+            // bloqueo 403 que YouTube aplica al cliente "web" por defecto (exige PO Token).
             await new Promise((resolve, reject) => {
-                const command = `yt-dlp -x --audio-format mp3 --audio-quality 0 -o "${tempFile}" "${video.url}"`;
+                const command = `yt-dlp -x --audio-format mp3 --audio-quality 0 --extractor-args "youtube:player_client=android" -o "${tempFile}" "${video.url}"`;
                 
                 const child = exec(command, { timeout: 120000 }, (error, stdout, stderr) => {
                     if (error) {
@@ -109,6 +111,7 @@ module.exports = {
             if (error.message.includes('Timeout')) errorMsg = "⏱️ La descarga tardó demasiado. Intenta con otra canción.";
             if (error.message.includes('not found')) errorMsg = "❌ No se encontró el video.";
             if (error.message.includes('copyright')) errorMsg = "🚫 El video tiene restricciones de copyright.";
+            if (error.message.includes('403')) errorMsg = "🚫 YouTube bloqueó la descarga (403). Actualiza yt-dlp con: winget upgrade yt-dlp";
             
             await sock.sendMessage(from, {
                 text: `❌ ${errorMsg}`

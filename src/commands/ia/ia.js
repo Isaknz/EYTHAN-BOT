@@ -1,18 +1,23 @@
 require("dotenv").config();
 const axios = require('axios');
+const config = require('../../../config');
 
 const historiales = {};
 const MAX_HISTORIAL = 10;
 
+// Modelo gratuito de OpenRouter. Cámbialo si prefieres uno de pago (ej: "openai/gpt-4o-mini").
+// Lista completa de modelos: https://openrouter.ai/models
+const MODEL = "openrouter/free";
+
 module.exports = {
     name: 'ia',
     aliases: ['ai', 'venice'],
-    
+
     async handleMention(sock, message, pregunta, { from, sender, senderName }) {
         // Verificar API key
-        if (!process.env.VENICE_API_KEY) {
+        if (!config.openrouterKey) {
             await sock.sendMessage(from, {
-                text: `❌ *Error:* No se ha configurado la clave de Venice.\n\nContacta al administrador.`,
+                text: `❌ *Error:* No se ha configurado la clave de OpenRouter.\n\nContacta al administrador.`,
                 mentions: [sender]
             }, { quoted: message });
             return;
@@ -37,14 +42,14 @@ module.exports = {
         }
 
         try {
-            await sock.sendMessage(from, { 
-                text: `⏳ *Venice AI* está pensando...` 
+            await sock.sendMessage(from, {
+                text: `⏳ Pensando...`
             }, { quoted: message });
 
             const response = await axios.post(
-                'https://api.venice.ai/api/v1/chat/completions',
+                'https://openrouter.ai/api/v1/chat/completions',
                 {
-                    model: 'kimi-k2-5',
+                    model: MODEL,
                     messages: [
                         {
                             role: 'system',
@@ -60,15 +65,18 @@ module.exports = {
                 },
                 {
                     headers: {
-                        'Authorization': `Bearer ${process.env.VENICE_API_KEY}`,
-                        'Content-Type': 'application/json'
+                        'Authorization': `Bearer ${config.openrouterKey}`,
+                        'Content-Type': 'application/json',
+                        // Opcionales, pero recomendados por OpenRouter para identificar tu app:
+                        'HTTP-Referer': 'https://github.com/Isaknz/EYTHAN-BOT',
+                        'X-Title': 'EYTHAN-BOT'
                     },
                     timeout: 30000
                 }
             );
 
             const respuesta = response.data.choices[0].message.content;
-            
+
             // Guardar respuesta en historial
             historiales[sender].push({ role: 'assistant', content: respuesta });
 
@@ -79,19 +87,19 @@ module.exports = {
 
         } catch (e) {
             console.error('Error IA:', e.response?.data || e.message);
-            
+
             let errorMsg = e.response?.data?.error?.message || e.message;
             if (e.code === 'ECONNABORTED') errorMsg = 'Tiempo de espera agotado';
             if (e.response?.status === 401) errorMsg = 'API key inválida';
-            if (e.response?.status === 429) errorMsg = 'Demasiadas solicitudes. Espera un momento.';
-            
+            if (e.response?.status === 429) errorMsg = 'Demasiadas solicitudes o sin créditos. Espera un momento o revisa tu saldo en openrouter.ai/settings/credits';
+
             await sock.sendMessage(from, {
                 text: `❌ *Error:* ${errorMsg}`,
                 mentions: [sender]
             }, { quoted: message });
         }
     },
-    
+
     // Comando directo .ia
     async execute(sock, message, args, { from, sender, senderName }) {
         const pregunta = args.join(' ');

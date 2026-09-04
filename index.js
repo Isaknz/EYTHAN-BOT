@@ -1,5 +1,5 @@
+require("dotenv").config(); // Cargar variables de entorno (SIEMPRE antes de cualquier require que use process.env)
 const { connectToWhatsApp } = require('./src/core/connection');
-require("dotenv").config(); // Cargar variables de entorno
 const pino = require('pino');
 const chalk = require('chalk');
 
