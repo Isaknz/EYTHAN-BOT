@@ -30,11 +30,11 @@ module.exports = async (sock, update) => {
             // =========================
             // FOTO PERFIL
             // =========================
-            let pp;
+            let profileImage;
             try {
-                pp = await sock.profilePictureUrl(user, 'image');
+                profileImage = { url: await sock.profilePictureUrl(user, 'image') };
             } catch {
-                pp = fs.readFileSync(FALLBACK_PROFILE_IMAGE);
+                profileImage = fs.readFileSync(FALLBACK_PROFILE_IMAGE);
             }
 
             // =========================
@@ -43,7 +43,7 @@ module.exports = async (sock, update) => {
             let texto = `👋 *BIENVENIDO*\nHola @${nombre}\n🎉 Bienvenido a:\n*${metadata.subject}*\n📜 Lee las reglas\n🤖 Disfruta tu estadía`;
 
             await sock.sendMessage(id, {
-                image: { url: pp },
+                image: profileImage,
                 caption: texto,
                 mentions: [user]
             });
