@@ -1,5 +1,7 @@
 const fs = require('fs-extra');
 const path = require('path');
+const config = require('../../../config');
+const { isAdmin: checkIsAdmin, isOwner: checkIsOwner } = require('../../utils/helpers');
 
 const WARN_DB = path.join(__dirname, '../../../data/warns.json');
 
@@ -86,7 +88,11 @@ module.exports = {
     name: 'warn',
     aliases: ['advertencia', 'warning'],
     
-    async handleCommand(sock, message, args, { from, sender, isAdmin, isOwner }) {
+    async execute(sock, message, args, context) {
+        const { from, sender } = context;
+        const isAdmin = context.isAdmin ?? await checkIsAdmin(sock, from, sender);
+        const isOwner = context.isOwner ?? checkIsOwner(sender, config);
+
         if (!isAdmin) {
             await sock.sendMessage(from, {
                 text: '❌ Solo administradores pueden usar este comando.'

@@ -8,7 +8,7 @@ module.exports = {
     name: 'imagen',
     aliases: ['img', 'gen', 'generate', 'draw'],
     
-    async handleCommand(sock, message, args, { from, sender }) {
+    async execute(sock, message, args, { from, sender }) {
         const prompt = args.join(' ');
         
         if (!prompt) {

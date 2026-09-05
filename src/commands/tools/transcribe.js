@@ -12,7 +12,7 @@ module.exports = {
     name: 'transcribir',
     aliases: ['transcribe', 'stt', 'audio'],
     
-    async handleCommand(sock, message, args, { from, sender }) {
+    async execute(sock, message, args, { from, sender }) {
         // Verificar si hay audio citado o adjunto
         const quoted = message.message?.extendedTextMessage?.contextInfo?.quotedMessage;
         const audioMessage = quoted?.audioMessage || message.message?.audioMessage;
