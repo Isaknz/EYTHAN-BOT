@@ -1,5 +1,9 @@
+const fs = require('fs');
+const path = require('path');
 const database = require('../core/database');
 const { generarAudioBienvenida } = require('../utils/audio-welcome');
+
+const FALLBACK_PROFILE_IMAGE = path.join(__dirname, '../../assets/perfil.jpg');
 
 module.exports = async (sock, update) => {
     try {
@@ -30,7 +34,7 @@ module.exports = async (sock, update) => {
             try {
                 pp = await sock.profilePictureUrl(user, 'image');
             } catch {
-                pp = "https://via.placeholder.com/300x300/4CAF50/FFFFFF?text=User";
+                pp = fs.readFileSync(FALLBACK_PROFILE_IMAGE);
             }
 
             // =========================
