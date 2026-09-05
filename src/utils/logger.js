@@ -80,8 +80,8 @@ setInterval(async () => {
             const fileDate = stat.mtime.toISOString().split('T')[0];
             
             if (fileDate !== today) {
-                const new Name = `${file}.${fileDate}.old`;
-                await fs.move(filePath, path.join(LOG_DIR, new Name));
+                const newName = `${file}.${fileDate}.old`;
+                await fs.move(filePath, path.join(LOG_DIR, newName));
             }
         }
     }

@@ -27,7 +27,7 @@ let fila = "";
 
 for (let j = 0; j < 5; j++) {
 
-const let ra =
+const letra =
 String.fromCharCode(
 65 + Math.floor(Math.random() * 26)
 );

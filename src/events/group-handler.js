@@ -4,7 +4,7 @@ const { generarAudioBienvenida } = require('../utils/audio-welcome');
 module.exports = async (sock, update) => {
     try {
         const { id, participants, action } = update;
-        
+
         if (action !== 'add') return;
 
         const groupSettings = database.getGroup(id);
@@ -30,7 +30,7 @@ module.exports = async (sock, update) => {
             try {
                 pp = await sock.profilePictureUrl(user, 'image');
             } catch {
-                pp = "https://i.imgur.com/8Km9tLL.jpg";
+                pp = "https://via.placeholder.com/300x300/4CAF50/FFFFFF?text=User";
             }
 
             // =========================

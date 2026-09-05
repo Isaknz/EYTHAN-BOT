@@ -47,7 +47,7 @@ module.exports = {
             });
         }
 
-        const let ra = args[0].toLowerCase();
+        const letra = args[0].toLowerCase();
 
         if (juego.letras.includes(letra)) {
             return sock.sendMessage(from, {

@@ -62,11 +62,11 @@ class LevelSystem {
         userData.xp += amount;
         userData.messages++;
         
-        const new Level = this.calculateLevel(userData.xp);
+        const newLevel = this.calculateLevel(userData.xp);
         
         let leveledUp = false;
-        if (new Level > oldLevel) {
-            userData.level = new Level;
+        if (newLevel > oldLevel) {
+            userData.level = newLevel;
             leveledUp = true;
         }
 
@@ -78,10 +78,10 @@ class LevelSystem {
             level: userData.level,
             leveledUp,
             oldLevel,
-            new Level,
+            newLevel,
             messages: userData.messages,
-            nextLevelXP: this.calculateXPForLevel(new Level + 1),
-            progress: Math.floor((userData.xp / this.calculateXPForLevel(new Level + 1)) * 100)
+            nextLevelXP: this.calculateXPForLevel(newLevel + 1),
+            progress: Math.floor((userData.xp / this.calculateXPForLevel(newLevel + 1)) * 100)
         };
     }
 
@@ -147,8 +147,8 @@ class LevelSystem {
         if (!this.data[groupId] || !this.data[groupId][userId]) return false;
         
         this.data[groupId][userId].xp += amount;
-        const new Level = this.calculateLevel(this.data[groupId][userId].xp);
-        this.data[groupId][userId].level = new Level;
+        const newLevel = this.calculateLevel(this.data[groupId][userId].xp);
+        this.data[groupId][userId].level = newLevel;
         
         await this.save();
         return this.getUserData(userId, groupId);
