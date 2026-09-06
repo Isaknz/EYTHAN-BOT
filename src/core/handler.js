@@ -140,7 +140,8 @@ async function messageHandler(sock, m) {
                 const participant = metadata.participants.find(item => item.id === sender);
                 const botId = sock.user?.id?.replace(/:.*@/, '@');
                 const botParticipant = metadata.participants.find(item => item.id.replace(/:.*@/, '@') === botId);
-                const violation = !participant?.admin && botParticipant?.admin && findViolation(settings.rules, body);
+                const violation = !participant?.admin && botParticipant?.admin &&
+                    findViolation(settings.rules, body, metadata.desc || metadata.description);
 
                 if (violation) {
                     const count = registerWarning(from, sender, violation);

@@ -40,8 +40,10 @@ module.exports = async (sock, update) => {
             // =========================
             // TEXTO
             // =========================
-            const rulesText = groupSettings.rules?.length
-                ? `\n\n📜 *Reglas del grupo*\n${groupSettings.rules.map((rule, index) => `${index + 1}. ${rule}`).join('\n')}`
+            const storedRules = groupSettings.rules || [];
+            const descriptionRules = metadata.desc || metadata.description;
+            const rulesText = storedRules.length || descriptionRules
+                ? `\n\n📜 *Reglas del grupo*\n${descriptionRules ? `${descriptionRules}\n` : ''}${storedRules.map((rule, index) => `${index + 1}. ${rule}`).join('\n')}`
                 : '\n📜 Este grupo todavía no tiene reglas configuradas.';
             let texto = `👋 *BIENVENIDO*\nHola @${nombre}\n🎉 Bienvenido a:\n*${metadata.subject}*${rulesText}\n\n🤖 Disfruta tu estadía`;
 

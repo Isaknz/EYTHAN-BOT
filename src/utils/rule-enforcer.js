@@ -39,10 +39,11 @@ function getBannedTerms(rule) {
         .filter(term => term.length >= 2 && term.length <= 80);
 }
 
-function findViolation(rules, text) {
+function findViolation(rules, text, description = '') {
     const normalizedText = normalize(text);
+    const allRules = [...(rules || []), ...String(description).split(/[\n;]+/).map(rule => rule.trim()).filter(Boolean)];
 
-    for (const rule of rules || []) {
+    for (const rule of allRules) {
         for (const term of getBannedTerms(rule)) {
             if (normalizedText.includes(term)) {
                 return { rule, term };
