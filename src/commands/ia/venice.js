@@ -53,8 +53,13 @@ module.exports = {
             });
         } catch (error) {
             console.error('Venice chat:', error.response?.data || error.message);
-            const detail = error.response?.data?.error?.message || error.response?.data?.message || error.message;
-            await sock.sendMessage(from, { text: `❌ Error de Venice: ${detail}` });
+            const status = error.response?.status;
+            const detail = status === 401
+                ? 'Venice rechazó la clave o el modelo requiere acceso Pro. Revisa tu API key, saldo y permisos del modelo.'
+                : status === 402
+                    ? 'Venice requiere saldo o créditos para este modelo.'
+                    : error.response?.data?.error?.message || error.response?.data?.message || error.message;
+            await sock.sendMessage(from, { text: `❌ Error de Venice${status ? ` (${status})` : ''}: ${detail}` });
         }
     }
 };

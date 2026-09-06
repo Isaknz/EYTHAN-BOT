@@ -45,7 +45,7 @@ module.exports = {
         } catch (error) {
             console.error('Kie AI:', error.response?.data || error.message);
             const detail = error.response?.data?.msg || error.response?.data?.message || error.message;
-            await sock.sendMessage(from, { text: `❌ Error de Kie AI: ${detail}` });
+            await sock.sendMessage(from, { text: `❌ Error de Kie AI con el modelo *${model}*: ${detail}` });
         }
     }
 };
