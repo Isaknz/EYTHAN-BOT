@@ -77,6 +77,7 @@ module.exports = {
 
 🤖 *INTELIGENCIA ARTIFICIAL*
 ◦ ${prefix}ia [pregunta] — Pregunta a la IA 🧠
+◦ ${prefix}venice pregunta — Chat directo con Venice 🌐
 ◦ ${prefix}kie pregunta — Kie AI ⚙️
 ◦ ${prefix}voz texto — ElevenLabs 🔊
 ◦ ${prefix}planificar objetivo — Crea un plan 📅

@@ -15,7 +15,7 @@ const MODEL = "openrouter/free";
 
 module.exports = {
     name: 'ia',
-    aliases: ['ai', 'venice'],
+    aliases: ['ai'],
 
     clearHistory(from, sender) {
         delete historiales[getHistoryKey(from, sender)];
