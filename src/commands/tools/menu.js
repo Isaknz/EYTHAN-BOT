@@ -60,6 +60,9 @@ module.exports = {
 ◦ ${prefix}gif [búsqueda] — Buscar GIF 🎞️
 
 🛠️ *HERRAMIENTAS*
+◦ ${prefix}recordar 30m mensaje — Recordatorio ⏰
+◦ ${prefix}recordatorios — Ver tus recordatorios 📋
+◦ ${prefix}cancelarrecordatorio ID — Cancelar recordatorio ❌
 ◦ ${prefix}sticker — Imagen a sticker 🖼️
 ◦ ${prefix}toimg — Sticker a imagen 🖼️
 ◦ ${prefix}calc — Calculadora 🔢
