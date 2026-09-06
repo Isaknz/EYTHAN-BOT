@@ -77,8 +77,6 @@ module.exports = {
 
 🤖 *INTELIGENCIA ARTIFICIAL*
 ◦ ${prefix}ia [pregunta] — Pregunta a la IA 🧠
-◦ ${prefix}openai pregunta — OpenAI 🤖
-◦ ${prefix}anthropic pregunta — Claude 🧠
 ◦ ${prefix}kie pregunta — Kie AI ⚙️
 ◦ ${prefix}voz texto — ElevenLabs 🔊
 ◦ ${prefix}planificar objetivo — Crea un plan 📅

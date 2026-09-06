@@ -1,4 +1,4 @@
-const config = require('../../../config');
+const { sendAI } = require('../../utils/openrouter');
 
 module.exports = {
     name: 'corregir',
@@ -19,29 +19,6 @@ module.exports = {
             });
         }
 
-        try {
-            const res = await fetch('https://api.anthropic.com/v1/messages', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-api-key': config.anthropicKey,
-                    'anthropic-version': '2023-06-01'
-                },
-                body: JSON.stringify({
-                    model: 'claude-haiku-4-5-20251001',
-                    max_tokens: 300,
-                    messages: [{ role: 'user', content: `Corrige la ortografía y gramática del siguiente texto. Muestra primero el texto corregido y luego una lista breve de los errores encontrados:\n\n${texto}` }]
-                })
-            });
-
-            const data = await res.json();
-            const correccion = data.content?.[0]?.text || 'No pude corregir el texto.';
-
-            await sock.sendMessage(from, {
-                text: `✏️ *Corrección*\n\n${correccion}`
-            });
-        } catch (e) {
-            await sock.sendMessage(from, { text: '❌ Error al corregir.' });
-        }
+        await sendAI(sock, from, `Corrige la ortografía y gramática. Muestra el texto corregido y una lista breve de errores:\n\n${texto}`, '✏️ *Corrección*', { maxTokens: 400 });
     }
 };

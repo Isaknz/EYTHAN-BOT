@@ -6,13 +6,11 @@ module.exports = {
     botNumber: '', // ← Se llena automáticamente al conectar
 
     // Claves de API (se cargan desde el archivo .env, nunca las pongas aquí en texto plano)
-    anthropicKey: process.env.ANTHROPIC_API_KEY,
     veniceKey: process.env.VENICE_API_KEY || process.env.VENICE_INFERENCE_KEY,
     kieKey: process.env.KIE_AI_API_KEY,
     kieUrl: process.env.KIE_API_URL || 'https://api.kie.ai/api/v1/jobs/createTask',
     elevenLabsKey: process.env.ELEVENLABS_API_KEY,
     elevenLabsVoiceId: process.env.ELEVENLABS_VOICE_ID || '21m00Tcm4TlvDq8ikWAM',
-    openAIKey: process.env.OPENAI_API_KEY,
     openrouterKey: process.env.OPENROUTER_API_KEY,
 
     // Configuración de imágenes

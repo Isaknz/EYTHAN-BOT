@@ -1,4 +1,4 @@
-const config = require('../../../config');
+const { sendAI } = require('../../utils/openrouter');
 
 module.exports = {
     name: 'resumir',
@@ -21,30 +21,6 @@ module.exports = {
         }
 
         await sock.sendMessage(from, { text: '📝 Resumiendo...' });
-
-        try {
-            const res = await fetch('https://api.anthropic.com/v1/messages', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-api-key': config.anthropicKey,
-                    'anthropic-version': '2023-06-01'
-                },
-                body: JSON.stringify({
-                    model: 'claude-haiku-4-5-20251001',
-                    max_tokens: 300,
-                    messages: [{ role: 'user', content: `Resume este texto de forma clara y concisa en español:\n\n${texto}` }]
-                })
-            });
-
-            const data = await res.json();
-            const resumen = data.content?.[0]?.text || 'No pude resumir el texto.';
-
-            await sock.sendMessage(from, {
-                text: `📝 *Resumen*\n\n${resumen}`
-            });
-        } catch (e) {
-            await sock.sendMessage(from, { text: '❌ Error al resumir.' });
-        }
+        await sendAI(sock, from, `Resume este texto de forma clara y concisa en español:\n\n${texto}`, '📝 *Resumen*', { maxTokens: 300 });
     }
 };

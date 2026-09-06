@@ -9,7 +9,7 @@ function getHistoryKey(from, sender) {
     return `${from}:${sender}`;
 }
 
-// Modelo gratuito de OpenRouter. Cámbialo si prefieres uno de pago (ej: "openai/gpt-4o-mini").
+// Modelo gratuito de OpenRouter.
 // Lista completa de modelos: https://openrouter.ai/models
 const MODEL = "openrouter/free";
 
