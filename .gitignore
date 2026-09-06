@@ -3,4 +3,6 @@ node_modules
 session/
 tmp/
 backups/
+data/progreso.json
+data/ia-memoria.json
 node_modules
