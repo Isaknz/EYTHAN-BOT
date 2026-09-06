@@ -3,6 +3,7 @@ const path = require('path');
 const config = require('../../config');
 const database = require('./database');
 const { isAdmin, isOwner } = require('../utils/helpers');
+const { recordMessage, recordCommand } = require('../utils/progreso');
 
 const commands = new Map();
 const commandsPath = path.join(__dirname, '../commands');
@@ -77,6 +78,12 @@ async function messageHandler(sock, m) {
         const groupSettings = isGroup ? database.getGroup(from) : null;
         const prefix = groupSettings?.prefix || config.prefix;
         const senderIsOwner = isOwner(sender, config);
+
+        try {
+            recordMessage(sender);
+        } catch (error) {
+            console.error('Error registrando progreso:', error.message);
+        }
 
         // Iniciar scheduler de anuncios (solo una vez)
         iniciarAnuncios(sock);
@@ -231,6 +238,11 @@ async function messageHandler(sock, m) {
         if (commands.has(commandName)) {
             const command = commands.get(commandName);
             const senderIsAdmin = isGroup ? await isAdmin(sock, from, sender) : false;
+            try {
+                recordCommand(sender, commandName);
+            } catch (error) {
+                console.error('Error registrando comando:', error.message);
+            }
             console.log(`⚡ Comando ejecutado: ${commandName} por ${senderName}`);
             
             await command.execute(sock, message, args, {

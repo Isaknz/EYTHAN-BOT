@@ -22,6 +22,8 @@ module.exports = {
 ◦ ${prefix}ping — Ver latencia del bot
 
 🎮 *DIVERSIÓN*
+◦ ${prefix}misiones — Misiones diarias 🎯
+◦ ${prefix}logros — Logros desbloqueados 🏆
 ◦ ${prefix}8ball — Bola mágica 🎱
 ◦ ${prefix}Insultar — El bot te insulta 😂
 ◦ ${prefix}adivina — Adivina el número 🔢
