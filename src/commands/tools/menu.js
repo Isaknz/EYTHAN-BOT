@@ -77,6 +77,7 @@ module.exports = {
 
 🤖 *INTELIGENCIA ARTIFICIAL*
 ◦ ${prefix}ia [pregunta] — Pregunta a la IA 🧠
+◦ ${prefix}olvidar — Reinicia la memoria de la IA 🧹
 ◦ ${prefix}analizarimagen — Analiza una imagen con IA 🔎
 ◦ ${prefix}resumir — Resume un texto 📝
 ◦ ${prefix}corregir — Corrige ortografía ✏️
