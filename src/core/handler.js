@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const config = require('../../config');
+const database = require('./database');
+const { isAdmin, isOwner } = require('../utils/helpers');
 
 const commands = new Map();
 const commandsPath = path.join(__dirname, '../commands');
@@ -72,6 +74,9 @@ async function messageHandler(sock, m) {
         const isGroup = from.endsWith('@g.us');
         const sender = message.key.participant || from;
         const senderName = message.pushName || 'Usuario';
+        const groupSettings = isGroup ? database.getGroup(from) : null;
+        const prefix = groupSettings?.prefix || config.prefix;
+        const senderIsOwner = isOwner(sender, config);
 
         // Iniciar scheduler de anuncios (solo una vez)
         iniciarAnuncios(sock);
@@ -176,7 +181,7 @@ async function messageHandler(sock, m) {
         // ==========================================
 
         // ============ AUTORESPUESTAS ============
-        if (body && !body.startsWith(config.prefix)) {
+        if (body && !body.startsWith(prefix)) {
             try {
                 const arCmd = commands.get('autorespuesta');
                 if (arCmd && arCmd.getDB) {
@@ -218,7 +223,6 @@ async function messageHandler(sock, m) {
         }
         // ========================================
 
-        const prefix = config.prefix;
         if (!body.startsWith(prefix)) return;
 
         const args = body.slice(prefix.length).trim().split(/\s+/);
@@ -226,6 +230,7 @@ async function messageHandler(sock, m) {
 
         if (commands.has(commandName)) {
             const command = commands.get(commandName);
+            const senderIsAdmin = isGroup ? await isAdmin(sock, from, sender) : false;
             console.log(`⚡ Comando ejecutado: ${commandName} por ${senderName}`);
             
             await command.execute(sock, message, args, {
@@ -233,6 +238,8 @@ async function messageHandler(sock, m) {
                 sender,
                 senderName,
                 isGroup,
+                isAdmin: senderIsAdmin,
+                isOwner: senderIsOwner,
                 prefix,
                 commands
             });
