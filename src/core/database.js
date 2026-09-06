@@ -33,8 +33,12 @@ const database = {
                 goodbye: true,
                 antilink: false,
                 antispam: false,
-                prefix: '.'
+                prefix: '.',
+                rules: []
             };
+            database.save(db);
+        } else if (!Array.isArray(db.groups[groupId].rules)) {
+            db.groups[groupId].rules = [];
             database.save(db);
         }
         

@@ -81,6 +81,7 @@ module.exports = {
 ◦ ${prefix}transferir @usuario [monto] — Enviar monedas 💸
 
 👥 *GRUPOS* _(solo admins)_
+◦ ${prefix}reglas — Ver reglas del grupo 📜
 ◦ ${prefix}tagall [mensaje] — Mencionar a todos 📢
 ◦ ${prefix}listar — Lista de miembros 👥
 ◦ ${prefix}encuesta pregunta | op1 | op2 — Encuesta 📊
