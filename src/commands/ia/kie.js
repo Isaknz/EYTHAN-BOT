@@ -9,9 +9,15 @@ module.exports = {
         if (!config.kieKey) {
             return sock.sendMessage(from, { text: '❌ Configura KIE_AI_API_KEY en .env.' });
         }
+        const model = process.env.KIE_MODEL;
+        if (!model) {
+            return sock.sendMessage(from, {
+                text: '❌ Configura KIE_MODEL en .env con el identificador exacto del modelo elegido en Kie.'
+            });
+        }
         try {
             const response = await axios.post(config.kieUrl, {
-                model: process.env.KIE_MODEL || 'gpt-4o-mini',
+                model,
                 input: { prompt }
             }, {
                 headers: {
@@ -21,12 +27,20 @@ module.exports = {
                 timeout: 60000
             });
             const data = response.data;
-            const taskId = data.taskId || data.task_id || data.data?.taskId || data.data?.task_id;
+            if (data.code && ![0, 200].includes(Number(data.code))) {
+                throw new Error(data.msg || data.message || `Kie respondió con código ${data.code}`);
+            }
+
+            const payload = data.data && typeof data.data === 'object' ? data.data : data;
+            const taskId = payload.taskId || payload.task_id || payload.recordId || payload.record_id;
             if (taskId) {
                 return sock.sendMessage(from, { text: `⚙️ Tarea Kie creada.\n\nID: ${taskId}\n\nKie procesa esta solicitud de forma asíncrona. Revisa el panel de tareas o configura un endpoint de consulta.` });
             }
-            const text = data.output || data.result || data.text || data.message || data.data?.output || data.data?.result;
-            if (!text) throw new Error('Kie no devolvió taskId ni texto. Revisa KIE_MODEL y el endpoint configurado.');
+            const text = payload.output || payload.result || payload.text || payload.message;
+            if (!text) {
+                const fields = Object.keys(payload).join(', ') || 'ninguno';
+                throw new Error(`Kie no devolvió un identificador. Campos recibidos: ${fields}`);
+            }
             await sock.sendMessage(from, { text: `⚙️ *Kie AI*\n\n${typeof text === 'string' ? text : JSON.stringify(text)}` });
         } catch (error) {
             console.error('Kie AI:', error.response?.data || error.message);
