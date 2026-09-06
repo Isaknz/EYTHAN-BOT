@@ -20,7 +20,11 @@ module.exports = {
             await sock.sendMessage(from, { audio: Buffer.from(response.data), mimetype: 'audio/mpeg', ptt: true });
         } catch (error) {
             console.error('ElevenLabs:', error.response?.data || error.message);
-            await sock.sendMessage(from, { text: `❌ Error de ElevenLabs: ${error.message}` });
+            const status = error.response?.status;
+            const detail = status === 402
+                ? 'ElevenLabs rechazó la solicitud por créditos o facturación. Revisa tu plan y saldo en el panel de ElevenLabs.'
+                : error.response?.data?.detail?.message || error.message;
+            await sock.sendMessage(from, { text: `❌ Error de ElevenLabs${status ? ` (${status})` : ''}: ${detail}` });
         }
     }
 };

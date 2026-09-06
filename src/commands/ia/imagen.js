@@ -62,7 +62,7 @@ module.exports = {
             await fs.writeFile(tempPath, imageBuffer);
 
             await sock.sendMessage(from, {
-                image: { url: tempPath },
+                image: imageBuffer,
                 caption: `🎨 *Prompt:* ${prompt}\n\n✨ Generado por Venice AI`
             }, { quoted: message });
 
@@ -73,8 +73,10 @@ module.exports = {
             console.error('Image generation error:', error.response?.data || error);
             
             let errorMsg = 'Error al generar la imagen';
-            if (error.response?.data?.error) {
-                errorMsg = error.response.data.error;
+            if (error.response?.data?.error?.message) {
+                errorMsg = error.response.data.error.message;
+            } else if (error.response?.data?.message) {
+                errorMsg = error.response.data.message;
             } else if (error.message.includes('timeout')) {
                 errorMsg = 'Tiempo de espera agotado. Intenta con una descripción más simple.';
             }
