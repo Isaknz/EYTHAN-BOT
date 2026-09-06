@@ -40,7 +40,10 @@ module.exports = async (sock, update) => {
             // =========================
             // TEXTO
             // =========================
-            let texto = `👋 *BIENVENIDO*\nHola @${nombre}\n🎉 Bienvenido a:\n*${metadata.subject}*\n📜 Lee las reglas\n🤖 Disfruta tu estadía`;
+            const rulesText = groupSettings.rules?.length
+                ? `\n\n📜 *Reglas del grupo*\n${groupSettings.rules.map((rule, index) => `${index + 1}. ${rule}`).join('\n')}`
+                : '\n📜 Este grupo todavía no tiene reglas configuradas.';
+            let texto = `👋 *BIENVENIDO*\nHola @${nombre}\n🎉 Bienvenido a:\n*${metadata.subject}*${rulesText}\n\n🤖 Disfruta tu estadía`;
 
             await sock.sendMessage(id, {
                 image: profileImage,

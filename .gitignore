@@ -5,4 +5,5 @@ tmp/
 backups/
 data/progreso.json
 data/ia-memoria.json
+data/rule-warnings.json
 node_modules

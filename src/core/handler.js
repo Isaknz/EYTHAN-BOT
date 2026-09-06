@@ -4,6 +4,7 @@ const config = require('../../config');
 const database = require('./database');
 const { isAdmin, isOwner } = require('../utils/helpers');
 const { recordMessage, recordCommand } = require('../utils/progreso');
+const { findViolation, registerWarning, clearWarnings } = require('../utils/rule-enforcer');
 
 const commands = new Map();
 const commandsPath = path.join(__dirname, '../commands');
@@ -130,6 +131,41 @@ async function messageHandler(sock, m) {
             }
         }
         // ==================================
+
+        // ============ REGLAS DEL GRUPO ============
+        if (isGroup && body) {
+            try {
+                const settings = database.getGroup(from);
+                const metadata = await sock.groupMetadata(from);
+                const participant = metadata.participants.find(item => item.id === sender);
+                const botId = sock.user?.id?.replace(/:.*@/, '@');
+                const botParticipant = metadata.participants.find(item => item.id.replace(/:.*@/, '@') === botId);
+                const violation = !participant?.admin && botParticipant?.admin && findViolation(settings.rules, body);
+
+                if (violation) {
+                    const count = registerWarning(from, sender, violation);
+                    const number = sender.split('@')[0];
+
+                    if (count >= 2) {
+                        clearWarnings(from, sender);
+                        await sock.sendMessage(from, {
+                            text: `🚫 @${number} fue expulsado por incumplir las reglas por segunda vez.\n\n📜 Regla: ${violation.rule}`,
+                            mentions: [sender]
+                        });
+                        await sock.groupParticipantsUpdate(from, [sender], 'remove');
+                    } else {
+                        await sock.sendMessage(from, {
+                            text: `⚠️ @${number}, esta es tu primera advertencia.\n\n📜 Regla incumplida: ${violation.rule}\n🔁 Una segunda infracción provocará tu expulsión.`,
+                            mentions: [sender]
+                        });
+                    }
+                    return;
+                }
+            } catch (error) {
+                console.error('Error aplicando reglas:', error.message);
+            }
+        }
+        // ============================================
 
         // ============ ANTISPAM ============
         if (isGroup && body) {
