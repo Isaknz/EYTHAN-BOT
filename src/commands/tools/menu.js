@@ -77,6 +77,19 @@ module.exports = {
 
 🤖 *INTELIGENCIA ARTIFICIAL*
 ◦ ${prefix}ia [pregunta] — Pregunta a la IA 🧠
+◦ ${prefix}planificar objetivo — Crea un plan 📅
+◦ ${prefix}codigo petición — Genera código 💻
+◦ ${prefix}debug error — Depura código 🐞
+◦ ${prefix}convertir formato texto — Convierte formatos 🔄
+◦ ${prefix}json texto — Estructura JSON 🧾
+◦ ${prefix}clasificar texto — Clasifica mensajes 🏷️
+◦ ${prefix}moderarmensaje texto — Revisa contenido 🛡️
+◦ ${prefix}responder mensaje — Sugiere una respuesta 💬
+◦ ${prefix}traduciria idioma texto — Traduce con contexto 🌍
+◦ ${prefix}documento texto — Analiza documentos 📄
+◦ ${prefix}leertexto — Extrae texto de imagen 🔤
+◦ ${prefix}memoria dato — Guarda una preferencia 🧠
+◦ ${prefix}agente tarea — Planifica tareas 🤖
 ◦ ${prefix}olvidar — Reinicia la memoria de la IA 🧹
 ◦ ${prefix}analizarimagen — Analiza una imagen con IA 🔎
 ◦ ${prefix}resumir — Resume un texto 📝
