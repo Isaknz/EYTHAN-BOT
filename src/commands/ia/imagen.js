@@ -1,6 +1,7 @@
 const axios = require('axios');
 const fs = require('fs-extra');
 const path = require('path');
+const config = require('../../../config');
 
 const TEMP_DIR = path.join(__dirname, '../../../temp');
 
@@ -18,7 +19,7 @@ module.exports = {
             return;
         }
 
-        if (!process.env.VENICE_API_KEY) {
+        if (!config.veniceKey) {
             await sock.sendMessage(from, {
                 text: '❌ No está configurada la API de Venice.'
             }, { quoted: message });
@@ -42,7 +43,7 @@ module.exports = {
                 },
                 {
                     headers: {
-                        'Authorization': `Bearer ${process.env.VENICE_API_KEY}`,
+                        'Authorization': `Bearer ${config.veniceKey}`,
                         'Content-Type': 'application/json'
                     },
                     timeout: 60000
